@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - SecureShare{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-shield-check"></i> Admin Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-people"></i> Users</h5>
+                <p class="card-text display-5">{{ total_users }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-file-earmark"></i> Files</h5>
+                <p class="card-text display-5">{{ total_files }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-share"></i> Shares</h5>
+                <p class="card-text display-5">{{ total_shares }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-journal-text"></i> Audit Logs</h5>
+                <p class="card-text display-5">{{ total_audit_logs }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Recent Users</h5>
+                <a href="{{ url_for('admin.users') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for user in recent_users %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('admin.view_user', user_id=user.id) }}">
+                                {{ user.username }}
+                            </a>
+                            {% if user.is_admin %}
+                                <span class="badge bg-danger">Admin</span>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">No users yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-file-earmark"></i> Recent Files</h5>
+                <a href="{{ url_for('admin.files') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for file in recent_files %}
+                        <li class="list-group-item">
+                            <strong>{{ file.original_filename }}</strong>
+                            <br><small class="text-muted">by {{ file.uploader.username }}</small>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">No files yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-journal-text"></i> Recent Activity</h5>
+                <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for log in recent_logs %}
+                        <li class="list-group-item">
+                            <strong>{{ log.action }}</strong>
+                            <br><small class="text-muted">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">No activity yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

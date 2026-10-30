@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SecureShare{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-folder"></i> My Files</h5>
+                <p class="card-text display-4">{{ owned_count }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-share"></i> Shared With Me</h5>
+                <p class="card-text display-4">{{ shared_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Files</h5>
+        <a href="{{ url_for('main.upload_file') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-upload"></i> Upload New File
+        </a>
+    </div>
+    <div class="card-body">
+        {% if recent_files %}
+            <div class="list-group">
+                {% for file in recent_files %}
+                    <a href="{{ url_for('main.view_file', file_id=file.id) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="bi bi-file-earmark"></i> {{ file.original_filename }}</h6>
+                            <small class="text-muted">{{ file.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        <p class="mb-1 text-muted small">{{ file.description or 'No description' }}</p>
+                        <small>{{ file.file_size }} bytes</small>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted text-center">No files yet. <a href="{{ url_for('main.upload_file') }}">Upload your first file</a>.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href="{{ url_for('main.my_files') }}" class="btn btn-outline-primary w-100 mb-2">
+            <i class="bi bi-folder"></i> View All My Files
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="{{ url_for('main.shared_with_me') }}" class="btn btn-outline-success w-100 mb-2">
+            <i class="bi bi-share"></i> View Shared Files
+        </a>
+    </div>
+</div>
+{% endblock %}

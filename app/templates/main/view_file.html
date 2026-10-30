@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ file.original_filename }} - SecureShare{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-file-earmark"></i> {{ file.original_filename }}</h5>
+                <div class="btn-group">
+                    <a href="{{ url_for('main.download_file', file_id=file.id) }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-download"></i> Download
+                    </a>
+                    {% if file.is_owned_by(current_user) %}
+                        <a href="{{ url_for('main.share_file', file_id=file.id) }}" class="btn btn-success btn-sm">
+                            <i class="bi bi-share"></i> Share
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Owner:</dt>
+                    <dd class="col-sm-9">{{ file.uploader.username }}</dd>
+                    
+                    <dt class="col-sm-3">Size:</dt>
+                    <dd class="col-sm-9">{{ file.file_size }} bytes</dd>
+                    
+                    <dt class="col-sm-3">Uploaded:</dt>
+                    <dd class="col-sm-9">{{ file.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+                    
+                    <dt class="col-sm-3">Type:</dt>
+                    <dd class="col-sm-9">{{ file.content_type or 'Unknown' }}</dd>
+                    
+                    {% if file.description %}
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">{{ file.description }}</dd>
+                    {% endif %}
+                </dl>
+                
+                {% if file.is_owned_by(current_user) %}
+                    <form method="POST" action="{{ url_for('main.delete_file', file_id=file.id) }}" onsubmit="return confirm('Are you sure you want to delete this file? This action cannot be undone.');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete File
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if file.is_owned_by(current_user) %}
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Shared With</h5>
+            </div>
+            <div class="card-body">
+                {% if shares %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Permission</th>
+                                    <th>Shared On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for share in shares %}
+                                    <tr>
+                                        <td>{{ share.recipient.username }}</td>
+                                        <td>
+                                            {% if share.permission == 'read' %}
+                                                <span class="badge bg-info">Read Only</span>
+                                            {% else %}
+                                                <span class="badge bg-success">Read/Write</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ share.shared_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('main.revoke_share', share_id=share.id) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Revoke access for {{ share.recipient.username }}?');">
+                                                <i class="bi bi-x-circle"></i> Revoke
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">This file is not shared with anyone.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> File Information</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-1"><strong>Access Level:</strong></p>
+                {% if file.is_owned_by(current_user) %}
+                    <p class="text-success mb-3">Owner (Full Access)</p>
+                {% else %}
+                    <p class="text-info mb-3">Shared (View Only)</p>
+                {% endif %}
+                
+                <p class="mb-1"><strong>Security:</strong></p>
+                <ul class="small text-muted">
+                    <li>File stored securely outside web root</li>
+                    <li>Access requires authentication</li>
+                    <li>All actions logged for audit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

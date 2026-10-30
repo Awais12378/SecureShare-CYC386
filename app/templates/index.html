@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}SecureShare - Secure File Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row align-items-center min-vh-100">
+    <div class="col-lg-6">
+        <div class="text-center text-lg-start">
+            <h1 class="display-4 fw-bold mb-4">
+                <i class="bi bi-shield-lock text-primary"></i> SecureShare
+            </h1>
+            <p class="lead mb-4">
+                A secure file sharing and collaboration platform built with security-first principles.
+                Share files safely with role-based access control, audit logging, and secure file storage.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-center justify-content-lg-start">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4 gap-3">
+                    <i class="bi bi-person-plus"></i> Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-4">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mt-5 mt-lg-0">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Key Features</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Secure Authentication</strong> - Password hashing, session management
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Role-Based Access Control</strong> - User and admin roles
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Secure File Storage</strong> - Files outside web root, secure access
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>File Sharing</strong> - Share with specific users, revoke access
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Audit Logging</strong> - Track all security-relevant events
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>CSRF Protection</strong> - All forms protected
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Input Validation</strong> - File type and size restrictions
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

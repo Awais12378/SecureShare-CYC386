@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-10-30T21:49:52.129538",
+  "stages": {
+    "checkout": false,
+    "setup": true,
+    "install": true,
+    "unit_tests": false,
+    "security_tests": false,
+    "sast": true,
+    "sast_check": false
+  },
+  "overall_status": "FAIL"
+}

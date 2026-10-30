@@ -1,0 +1,52 @@
+# Semgrep Configuration for SecureShare
+# Python/Flask security rules
+
+rules:
+  - id: python.flask.security
+    languages:
+      - python
+    message: Flask security best practices
+    severity: WARNING
+    patterns:
+      - pattern: eval(...)
+      - pattern: exec(...)
+      - pattern: subprocess.run(..., shell=True)
+      - pattern: os.system(...)
+      - pattern: pickle.loads(...)
+      
+  - id: python.sql.injection
+    languages:
+      - python
+    message: Potential SQL injection
+    severity: ERROR
+    patterns:
+      - pattern: f"SELECT ... {var} ..."
+      - pattern: f"INSERT ... {var} ..."
+      - pattern: f"UPDATE ... {var} ..."
+      
+  - id: python.command.injection
+    languages:
+      - python
+    message: Potential command injection
+    severity: ERROR
+    patterns:
+      - pattern: os.system($USER_INPUT)
+      - pattern: subprocess.call($USER_INPUT, shell=True)
+      
+  - id: python.hardcoded.secret
+    languages:
+      - python
+    message: Hardcoded secret detected
+    severity: ERROR
+    patterns:
+      - pattern: secret_key = '...'
+      - pattern: password = '...'
+      - pattern: api_key = '...'
+      
+  - id: python.debug.enabled
+    languages:
+      - python
+    message: Debug mode enabled in production
+    severity: WARNING
+    patterns:
+      - pattern: DEBUG = True

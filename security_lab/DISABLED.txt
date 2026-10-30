@@ -1,0 +1,14 @@
+SECURITY LAB - DISABLED BY DEFAULT
+
+This directory contains demonstration code for security vulnerabilities
+for educational purposes only. These files are NOT part of the main
+SecureShare application and should NOT be used in production.
+
+To enable this lab:
+1. Remove this DISABLED.txt file
+2. Review the README.md in this directory
+3. Understand the vulnerabilities being demonstrated
+4. Use only for educational purposes in a controlled environment
+
+WARNING: The code in this directory contains intentional security
+vulnerabilities. Do not deploy or use in any production environment.
